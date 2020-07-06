@@ -1,5 +1,6 @@
 <?php
     namespace app\controllers;
+    header("content-type:image/jpeg");
 
     use yii\data\Pagination;
     use yii\web\Controller;
@@ -16,8 +17,18 @@
             return $this->render('posts', ['posts' => $posts, 'pagination' => $pagination]);
         }
         public function actionImgcntrl($id){
-            $img = posts::find()->limit(1)->where(['nomer' => $id])->one();
-            print $img['image'];
+            $idt = filter_var($id, FILTER_VALIDATE_INT, array('options' => array('min_range' => -1)));
+            if($idt){
+                //var_dump($id);
+                //$idt = (int)$id;
+                $img = posts::find()->where(['nomer' => $idt])->one();
+                $imagecontent=base64_decode($img['image']);
+                print $imagecontent;
+            }elseif($idt=0){
+                $img = posts::find()->where(['nomer' => $idt])->one();
+                $imagecontent=base64_decode($img['image']);
+                print $imagecontent;
+            }
         }
     }
 ?>
