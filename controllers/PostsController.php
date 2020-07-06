@@ -15,7 +15,7 @@
             $posts = posts::find()->orderBy('time')->offset($pagination->offset)->limit($pagination->limit)->all();
             return $this->render('posts', ['posts' => $posts, 'pagination' => $pagination]);
         }
-        public function imgcntrl($id){
+        public function actionImgcntrl($id){
             $img = posts::find()->limit(1)->where(['nomer' => $id])->one();
             print $img['image'];
         }

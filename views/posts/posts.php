@@ -6,7 +6,7 @@
     foreach($posts as $post){
         print <<<_HTML_
             {$post['text']}</br>
-            <img src="" width= 30%></br>
+            <img src="localhost/yiisite/web/?id={$post['nomer']}&r=posts/imgcntrl" width= 30%></br>
             {$post['time']}</br>
         _HTML_;
     }
