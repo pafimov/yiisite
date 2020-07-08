@@ -5,8 +5,12 @@
     use yii\data\Pagination;
     use yii\web\Controller;
     use app\models\posts;
+    use app\models\addpost;
+    use Yii;
+    use yii\helpers\Html;
+    use yii\web\UploadedFile as WebUploadedFile;
 
-    class PostsController extends Controller{
+class PostsController extends Controller{
         public function actionPostact()
         {
             $pagination = new Pagination([
@@ -28,6 +32,28 @@
                 $img = posts::find()->where(['nomer' => $idt])->one();
                 $imagecontent=base64_decode($img['image']);
                 print $imagecontent;
+            }
+        }
+        public function actionAddpost(){
+            $model = new addpost();
+            if(Yii::$app->request->isPost){
+                $model->image = WebUploadedFile::getInstance($model, 'image');
+                //$model->load(Yii::$app->request->post('text'));
+                //var_dump($_POST['text']);
+                //$model->text = Yii::$app->request->post(Html::getInputName($model, 'text'));
+                //$model->load(Yii::$app->request->post('addpost[text]'));
+                //$model->text = Yii::$app->request->post('text');
+                $model->text = $_POST['addpost']['text'];
+                $model->timer = date("Y-m-d H:i:s");
+                $sp = $model->savephoto();
+                if($sp){
+                    $model->addtodb();
+                    return $this->render('addedpost', ['model' => $model, 'success' => true]);                   
+                }else{
+                    return $this->render('addedpost', ['model' => $model, 'success' => false, 'sp' =>$sp]);
+                }
+            }else{
+                return $this->render('addedpost', ['model' => $model, 'success' => false]);
             }
         }
     }
